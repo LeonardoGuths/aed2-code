@@ -17,7 +17,7 @@ typedef struct{
     char nome[50];
 }Lista;
 
-int menu (int Vatual);
+int menu (void);
 void Clear (Lista *pLista);
 void Reset (Lista *pLista);
 int Push (Lista *pLista, Nodo *pNodo, int index);
@@ -26,8 +26,8 @@ void List (Lista *pLista, int qntv);
 
 int main()
 {
-    int o=0, index=0, qntv, Vatual=0, indi, peso, qual;
-    char rmv[50];
+    int o=0, index=0, qntv, indi1, indi2, peso, qual;
+    char nome[50];
     Nodo *pNodo;
     Lista *pLista;
     printf ("Trabalho de Implementacao de Grafos\n");
@@ -53,48 +53,73 @@ int main()
 
     while (o != 5)
     {
-        o = menu(Vatual);
+        o = menu();
         switch (o)
         {
             case 1:
-                printf ("Insira o indice do vertice que voce quer mexer: ");
-                scanf ("%d",&qual);
-                if (qual<(qntv-1))
-                    Vatual = qual;
-                else
+                List(pLista, qntv);
+                setbuf(stdin, NULL);
+                printf ("Nome do vertice inicial: ");
+                scanf ("%[^\n]",nome);
+
+                indi1 = -1;
+                for (int i=0; i<qntv; i++)
+                {
+                    if (strcmp(nome, pLista[i].nome) == 0)
+                        indi1 = i;
+                }
+
+                if (indi1 == -1)
+                {
                     printf ("Este vertice nao existe!\n");
-                break;
-            case 2:
-                pNodo = (Nodo *)malloc(sizeof(Nodo));
+                    break;
+                }
 
                 setbuf(stdin,NULL);
-                printf ("Nome do vertice: ");
-                scanf ("%[^\n]",pNodo->info.nome);
-                printf ("Indice dele: ");
-                scanf ("%d",&indi);
+                printf ("Nome do vertice adjacente: ");
+                scanf ("%[^\n]",nome);
+
+                indi2 = -1;
+                for (int i=0; i<qntv; i++)
+                {
+                    if (strcmp(nome, pLista[i].nome) == 0)
+                        indi2 = i;
+                }
+
+                if (indi2 == -1)
+                {
+                    printf ("Este vertice nao existe!\n");
+                    break;
+                }
+
+                pNodo = (Nodo *)malloc(sizeof(Nodo));
+                strcpy(pNodo->info.nome, nome);
+
                 printf ("Peso da aresta: ");
                 scanf ("%d",&pNodo->info.peso);
                 peso = pNodo->info.peso;
-                Push(&pLista[Vatual], pNodo, index);
+
+                Push(&pLista[indi1], pNodo, 0);
 
                 pNodo = (Nodo *)malloc(sizeof(Nodo));
 
-                strcpy(pNodo->info.nome, &pLista[Vatual].nome);
+                strcpy(pNodo->info.nome, &pLista[indi1].nome);
                 pNodo->info.peso = peso;
-                Push(&pLista[indi], pNodo, index);
-                //index++;
+                Push(&pLista[indi2], pNodo, 0);
                 break;
-            case 3:
+            case 2:
                 printf ("Qual vertice deseja remover: ");
                 setbuf(stdin,NULL);
-                scanf ("%[^\n]",rmv);
+                scanf ("%[^\n]",nome);
 
-                Pop(&pLista[Vatual], rmv);
+                //Pop(&pLista[vatual], nome);
+                break;
+            case 3:
+                printf ("- - LISTA DE ADJACENCIA - -\n");
+                List(pLista, qntv);
+                printf ("- - - - - - - - - - - - - -\n");
                 break;
             case 4:
-                List(pLista, qntv);
-                break;
-            case 5:
                 for (int i=0; i<qntv; i++)
                     Clear(&pLista[i]);
                 exit(0);
@@ -104,15 +129,14 @@ int main()
 return 0;
 }
 
-int menu (int Vatual)
+int menu (void)
 {
     int o;
-    printf ("1. Escolher o vertice\n");
-    printf ("2. Adicionar vertice adjacente\n");
-    printf ("3. Remover um vertice adjacente\n");
-    printf ("4. Lista na tela a lista de adjacencia\n");
-    printf ("5. Sair do programa\n");
-    printf ("- - - V[%d] - - -\nOpcao: ",Vatual);
+    printf ("1. Adicionar vertice adjacente\n");
+    printf ("2. Remover um vertice adjacente\n");
+    printf ("3. Lista na tela a lista de adjacencia\n");
+    printf ("4. Sair do programa\n");
+    printf ("Opcao: ");
     scanf ("%d",&o);
     return o;
 }
@@ -212,7 +236,7 @@ void Pop (Lista *pLista, char *rmv)
 void List (Lista *pLista, int qntv)
 {
     Nodo *atual;
-
+    
     for (int i=0; i<qntv; i++)
     {
         atual = pLista[i].pFirst;
@@ -230,8 +254,8 @@ void List (Lista *pLista, int qntv)
         else
             printf ("NULL\n");
     }
+    
 }
 
-//voltar pro anterior
-//ver ql indice pelo nome
-//(?)conferir se ja n ta na lista(?)
+//conferir se ja n ta na lista
+//verificar se tem memory leaks
