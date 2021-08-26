@@ -276,7 +276,3 @@ void List (Lista *pLista, int qntv)
     }
     
 }
-
-//conferir se ja n ta na lista
-//verificar se tem memory leaks
-//teste4
