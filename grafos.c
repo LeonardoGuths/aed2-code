@@ -23,6 +23,7 @@ void Reset (Lista *pLista);
 int Push (Lista *pLista, Nodo *pNodo, int index);
 void Pop (Lista *pLista, char *rmv);
 void List (Lista *pLista, int qntv);
+int Equals (Lista *pLista, char *nome);
 
 int main()
 {
@@ -58,70 +59,69 @@ int main()
         {
             case 1:
                 List(pLista, qntv);
-                setbuf(stdin, NULL);
-                printf ("Nome do vertice inicial: ");
-                scanf ("%[^\n]",nome);
 
                 indi1 = -1;
-                for (int i=0; i<qntv; i++)
+                while (indi1 == -1)
                 {
-                    if (strcmp(nome, pLista[i].nome) == 0)
-                        indi1 = i;
-                }
+                    setbuf(stdin, NULL);
+                    printf ("Nome do vertice inicial: ");
+                    scanf ("%[^\n]",nome);
 
-                if (indi1 == -1)
-                {
-                    printf ("Este vertice nao existe!\n");
-                    break;
+                    //indi1 = -1;
+                    for (int i=0; i<qntv; i++)
+                    {
+                        if (strcmp(nome, pLista[i].nome) == 0)
+                            indi1 = i;
+                    }
+                    if (indi1 == -1)
+                        printf (" * Este vertice nao existe! Insira um vertice valido!\n");
                 }
-
-                setbuf(stdin,NULL);
-                printf ("Nome do vertice adjacente: ");
-                scanf ("%[^\n]",nome);
 
                 indi2 = -1;
-                for (int i=0; i<qntv; i++)
+                while (indi2 == -1)
                 {
-                    if (strcmp(nome, pLista[i].nome) == 0)
-                        indi2 = i;
-                }
+                    setbuf(stdin,NULL);
+                    printf ("Nome do vertice adjacente: ");
+                    scanf ("%[^\n]",nome);
 
-                if (indi2 == -1)
+                    //indi2 = -1;
+                    for (int i=0; i<qntv; i++)
+                    {
+                        if (strcmp(nome, pLista[i].nome) == 0)
+                            indi2 = i;
+                    }
+                    if (indi2 == -1)
+                        printf (" * Este vertice nao existe! Insira um vertice valido!\n");
+                }
+                if (!(Equals (&pLista[indi1], nome)))
                 {
-                    printf ("Este vertice nao existe!\n");
-                    break;
+                    pNodo = (Nodo *)malloc(sizeof(Nodo));
+                    strcpy(pNodo->info.nome, nome);
+
+                    printf ("Peso da aresta: ");
+                    scanf ("%d",&pNodo->info.peso);
+                    peso = pNodo->info.peso;
+
+                    Push(&pLista[indi1], pNodo, 0);
+
+                    pNodo = (Nodo *)malloc(sizeof(Nodo));
+
+                    strcpy(pNodo->info.nome, &pLista[indi1].nome);
+                    pNodo->info.peso = peso;
+                    Push(&pLista[indi2], pNodo, 0);
                 }
-
-                pNodo = (Nodo *)malloc(sizeof(Nodo));
-                strcpy(pNodo->info.nome, nome);
-
-                printf ("Peso da aresta: ");
-                scanf ("%d",&pNodo->info.peso);
-                peso = pNodo->info.peso;
-
-                Push(&pLista[indi1], pNodo, 0);
-
-                pNodo = (Nodo *)malloc(sizeof(Nodo));
-
-                strcpy(pNodo->info.nome, &pLista[indi1].nome);
-                pNodo->info.peso = peso;
-                Push(&pLista[indi2], pNodo, 0);
+                else
+                    printf (" * Estes vertices ja sao adjacentes!\n");
                 break;
             case 2:
-                printf ("Qual vertice deseja remover: ");
-                setbuf(stdin,NULL);
-                scanf ("%[^\n]",nome);
-
-                //Pop(&pLista[vatual], nome);
-                break;
-            case 3:
                 printf ("- - LISTA DE ADJACENCIA - -\n");
                 List(pLista, qntv);
                 printf ("- - - - - - - - - - - - - -\n");
                 break;
-            case 4:
+            case 3:
                 for (int i=0; i<qntv; i++)
                     Clear(&pLista[i]);
+                free(pLista);
                 exit(0);
                 break;
         }
@@ -133,9 +133,8 @@ int menu (void)
 {
     int o;
     printf ("1. Adicionar vertice adjacente\n");
-    printf ("2. Remover um vertice adjacente\n");
-    printf ("3. Lista na tela a lista de adjacencia\n");
-    printf ("4. Sair do programa\n");
+    printf ("2. Mostra na tela a lista de adjacencia\n");
+    printf ("3. Sair do programa\n");
     printf ("Opcao: ");
     scanf ("%d",&o);
     return o;
@@ -164,7 +163,28 @@ void Clear (Lista *pLista)
         }
         free(atual);
     }
-    free(pLista);
+    //free(pLista);
+}
+
+int Equals (Lista *pLista, char *nome)
+{
+    Nodo *atual, *prox;
+    if (pLista->pFirst != NULL)
+    {
+        atual = pLista->pFirst;
+        prox = atual->pNext;
+
+        while (prox != NULL)
+        {
+            if (strcmp(atual->info.nome, nome) == 0)
+                return 1;
+            atual = prox;
+            prox = atual->pNext;
+        }
+        if (strcmp(atual->info.nome, nome) == 0)
+            return 1;
+    }
+    return 0;
 }
 
 int Push (Lista *pLista, Nodo *pNodo, int index)
@@ -259,4 +279,4 @@ void List (Lista *pLista, int qntv)
 
 //conferir se ja n ta na lista
 //verificar se tem memory leaks
-//teste
+//teste4
