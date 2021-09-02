@@ -9,10 +9,6 @@ typedef struct{
 }Nome;
 
 int menu (void);
-//void Clear (Lista *pLista);
-//void Reset (Lista *pLista);
-//int Push (Lista *pLista, Nodo *pNodo, int index);
-//void Pop (Lista *pLista, char *rmv);
 void List (int **matriz, Nome *nomes, int qntv);
 int Equals (int **matriz, int indi1, int indi2, int qntv);
 int **geraMatriz (int qntv);
@@ -48,8 +44,8 @@ int main()
         setbuf (stdin, NULL);
         scanf ("%[^\n]",nomes[i].nome);
     }
-    
-    /*hard code pra um grafo inventado
+
+    //*hard code pra um grafo inventado
     matriz[0][1] = 6;
     matriz[0][3] = 15;
     matriz[0][5] = 2;
@@ -62,7 +58,7 @@ int main()
     matriz[4][3] = 10;
     matriz[5][0] = 1;
     matriz[5][4] = 2;
-    */
+    
 
     while (o != 5)
     {
@@ -226,10 +222,11 @@ void List (int **matriz, Nome *nomes, int qntv)
 
 void Dijkstra (int **matriz, Nome *nomes, int qntv, int ini, int fim)
 {
-    int i, *dist, *antec, *visitado, cont=0, DMenor, IMenor=ini;
+    int i, *dist, *antec, *visitado, cont=0, DMenor, IMenor=ini, *aux;
     dist = (int *)malloc(sizeof(int)*qntv);
     antec = (int *)malloc(sizeof(int)*qntv);
     visitado = (int *)malloc(sizeof(int)*qntv);
+    aux = (int *)malloc(sizeof(int)*qntv);
 
     //inicializa os vetores dist[x](distancia do vertice x ate o ponto inicial),
     //                      antec[x](antecessor do vertice x no caminho dist[x])
@@ -275,16 +272,24 @@ void Dijkstra (int **matriz, Nome *nomes, int qntv, int ini, int fim)
         cont++;
     }
 
+
     if (dist[fim] < DIST_MAX)
     {
-        printf ("Distancia total: %d\n",dist[fim]);
-        printf ("END | ");
+        printf ("START | %s -> ", nomes[ini].nome);
+        cont=0;
         do
         {
-            printf ("%s <- ",nomes[fim].nome);
+            aux[cont] = fim;
             fim = antec[fim];
+            cont++;
         }while (fim != ini);
-        printf ("%s | START\n", nomes[ini].nome);
+
+        for (i=(cont-1); i>0; i--)
+        {
+            printf ("%s -> ",nomes[aux[i]].nome);
+        }
+        printf ("%s | END\n", nomes[aux[i]].nome);
+        printf ("Distancia total: %d\n",dist[aux[i]]);
     }
     else
     {
@@ -294,4 +299,5 @@ void Dijkstra (int **matriz, Nome *nomes, int qntv, int ini, int fim)
     free(dist);
     free(antec);
     free(visitado);
+    free(aux);
 }
