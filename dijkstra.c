@@ -45,7 +45,7 @@ int main()
         scanf ("%[^\n]",nomes[i].nome);
     }
 
-    //*hard code pra um grafo inventado
+    /*hard code pra um grafo inventado
     matriz[0][1] = 6;
     matriz[0][3] = 15;
     matriz[0][5] = 2;
@@ -58,7 +58,7 @@ int main()
     matriz[4][3] = 10;
     matriz[5][0] = 1;
     matriz[5][4] = 2;
-    
+    */
 
     while (o != 5)
     {
