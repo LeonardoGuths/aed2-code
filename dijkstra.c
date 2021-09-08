@@ -17,49 +17,64 @@ void Dijkstra (int **matriz, Nome *nomes, int qntv, int ini, int fim);
 
 int main()
 {
-    int o=0, index=0, qntv, indi1, indi2, peso, qual;
+    int o, index=0, qntv, indi1, indi2, peso, qual;
     char nome[50], fim[50];
     int **matriz;
     Nome *nomes;
 
     printf ("Algoritmo de Dijkstra\n");
-    printf ("%d\n",DIST_MAX);
-    printf ("Quantos vertices deseja inserir (max 20): ");
-    scanf ("%d",&qntv);
-
-    while (qntv<=0 || qntv>20)
+    printf ("(1) Construir o grafo manualmente\n(2) Utilizar o grafo pre-definido (imagem em anexo)\nOpcao: ");
+    scanf ("%d",&o);
+    if (o==1)
     {
-        printf ("Insira uma quantidade valida (de 1 a 20): ");
+        printf ("Quantos vertices deseja inserir (max 20): ");
         scanf ("%d",&qntv);
+
+        while (qntv<=0 || qntv>20)
+        {
+            printf ("Insira uma quantidade valida (de 1 a 20): ");
+            scanf ("%d",&qntv);
+        }
+
+        matriz = geraMatriz (qntv);
+        nomes = (Nome *)malloc(sizeof(Nome)*qntv);
+
+        printf ("Digite o nome dos vertices a seguir:\n");
+        for (int i=0; i<qntv; i++)
+        {
+            printf ("V[%d]: ",i);
+            setbuf (stdin, NULL);
+            scanf ("%[^\n]",nomes[i].nome);
+        }
     }
-
-    matriz = geraMatriz (qntv);
-    nomes = (Nome *)malloc(sizeof(Nome)*qntv);
-
-    printf ("Digite o nome dos vertices a seguir:\n");
-    for (int i=0; i<qntv; i++)
+    else
     {
-        //pLista[i].pFirst = NULL;
-        printf ("V[%d]: ",i);
-        setbuf (stdin, NULL);
-        scanf ("%[^\n]",nomes[i].nome);
+        qntv = 6;
+        matriz = geraMatriz (qntv);
+        nomes = (Nome *)malloc(sizeof(Nome)*qntv);
+
+        strcpy(nomes[0].nome, "A");
+        strcpy(nomes[1].nome, "B");
+        strcpy(nomes[2].nome, "C");
+        strcpy(nomes[3].nome, "D");
+        strcpy(nomes[4].nome, "E");
+        strcpy(nomes[5].nome, "F");
+
+        matriz[0][1] = 6;
+        matriz[0][3] = 15;
+        matriz[0][5] = 2;
+        matriz[0][4] = 5;
+        matriz[1][0] = 4;
+        matriz[1][2] = 4;
+        matriz[1][5] = 2;
+        matriz[2][3] = 3;
+        matriz[3][1] = 5;
+        matriz[4][3] = 10;
+        matriz[5][0] = 1;
+        matriz[5][4] = 2;
     }
 
-    /*hard code pra um grafo inventado
-    matriz[0][1] = 6;
-    matriz[0][3] = 15;
-    matriz[0][5] = 2;
-    matriz[0][4] = 5;
-    matriz[1][0] = 4;
-    matriz[1][2] = 4;
-    matriz[1][5] = 2;
-    matriz[2][3] = 3;
-    matriz[3][1] = 5;
-    matriz[4][3] = 10;
-    matriz[5][0] = 1;
-    matriz[5][4] = 2;
-    */
-
+    o=0;
     while (o != 5)
     {
         o = menu();
@@ -92,7 +107,6 @@ int main()
                     printf ("Nome do vertice adjacente: ");
                     scanf ("%[^\n]",nome);
 
-                    //indi2 = -1;
                     for (int i=0; i<qntv; i++)
                     {
                         if (strcmp(nome, nomes[i].nome) == 0)
@@ -125,7 +139,6 @@ int main()
                     printf ("Nome do vertice inicial: ");
                     scanf ("%[^\n]",nome);
 
-                    //indi1 = -1;
                     for (int i=0; i<qntv; i++)
                     {
                         if (strcmp(nome, nomes[i].nome) == 0)
@@ -142,7 +155,6 @@ int main()
                     printf ("Nome do vertice final: ");
                     scanf ("%[^\n]",nome);
 
-                    //indi2 = -1;
                     for (int i=0; i<qntv; i++)
                     {
                         if (strcmp(nome, nomes[i].nome) == 0)
