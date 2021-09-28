@@ -314,12 +314,14 @@ void Kruskal (Aresta *arestas, int qnta, int qntv)
 
             if (x != y)
             {
-                arestasFinal[qntaF++];
+                arestasFinal[qntaF++] = atual;
                 Uniao (auxiliar, x, y);
             }
             
         }
     }
+    printf ("ARESTAS FINAIS\n");
+    ListArestas(arestasFinal, qntaF);
 }
 
 void Sort(Aresta *arestas, int qnta)
@@ -347,5 +349,16 @@ int Procura (Subconjunto *auxiliar, int i)
 
 void Uniao (Subconjunto *auxiliar, int x, int y)
 {
-    
+    int raizx = Procura(auxiliar, x);
+    int raizy = Procura(auxiliar, y);
+
+    if (auxiliar[raizx].rank < auxiliar[raizy].rank)
+        auxiliar[raizx].pai = raizy;
+    else if (auxiliar[raizx].rank > auxiliar[raizy].rank)
+        auxiliar[raizy].pai = raizx;
+    else
+    {
+        auxiliar[raizy].pai = raizx;
+        auxiliar[raizx].rank++;
+    }
 }
