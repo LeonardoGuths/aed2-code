@@ -322,6 +322,9 @@ void Kruskal (Aresta *arestas, int qnta, int qntv)
     }
     printf ("ARESTAS FINAIS\n");
     ListArestas(arestasFinal, qntaF);
+
+    free(arestasFinal);
+    free(auxiliar);
 }
 
 void Sort(Aresta *arestas, int qnta)
