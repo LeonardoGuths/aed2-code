@@ -21,8 +21,8 @@ void List (int **matriz, Nome *nomes, int qntv);
 int Equals (int **matriz, int indi1, int indi2, int qntv);
 int **geraMatriz (int qntv);
 void insereAresta (Aresta *arestas, int indi1, int indi2, int peso, int index);
-void ListArestas (Aresta *arestas, int qnta);
-void Kruskal (Aresta *arestas, int qnta, int qntv);
+void ListArestas (Aresta *arestas, int qnta, Nome *nomes);
+void Kruskal (Aresta *arestas, int qnta, int qntv, Nome *nomes);
 void Sort(Aresta *arestas, int qnta);
 int Procura (Subconjunto *auxiliar, int i);
 void Uniao (Subconjunto *auxiliar, int x, int y);
@@ -193,11 +193,11 @@ int main()
                 List(matriz, nomes, qntv);
                 printf ("- - - - - - - - - - - - - -\n");
                 printf ("- - - LISTA DE ARESTAS - - -\n");
-                ListArestas(arestas, qnta);
+                ListArestas(arestas, qnta, nomes);
                 printf ("- - - - - - - - - - - - - -\n");
                 break;
             case 3:
-                Kruskal (arestas, qnta, qntv);
+                Kruskal (arestas, qnta, qntv, nomes);
                 break;
             case 4:
                 for (int i=0; i<qntv; i++)
@@ -273,15 +273,15 @@ void insereAresta(Aresta *arestas, int indi1, int indi2, int peso, int index)
     arestas[index-1].peso = peso;
 }
 
-void ListArestas (Aresta *arestas, int qnta)
+void ListArestas (Aresta *arestas, int qnta, Nome *nomes)
 {
     for (int i=0; i<qnta; i++)
     {
-        printf ("[%d -> %d]: %d\n",arestas[i].origem, arestas[i].destino, arestas[i].peso);
+        printf ("[%s -> %s]: %d\n",nomes[arestas[i].origem].nome, nomes[arestas[i].destino].nome, arestas[i].peso);
     }
 }
 
-void Kruskal (Aresta *arestas, int qnta, int qntv)
+void Kruskal (Aresta *arestas, int qnta, int qntv, Nome *nomes)
 {
     int i, qntaF=0, x, y;
     Aresta *arestasFinal, atual;
@@ -320,8 +320,8 @@ void Kruskal (Aresta *arestas, int qnta, int qntv)
             
         }
     }
-    printf ("ARESTAS FINAIS\n");
-    ListArestas(arestasFinal, qntaF);
+    printf ("* * * Arestas resultantes apos aplicacao do algoritmo de Kruskal * * *\n");
+    ListArestas(arestasFinal, qntaF, nomes);
 
     free(arestasFinal);
     free(auxiliar);
