@@ -358,7 +358,7 @@ void Uniao (Subconjunto *auxiliar, int x, int y)
     if (auxiliar[raizx].rank < auxiliar[raizy].rank)
         auxiliar[raizx].pai = raizy;
     else if (auxiliar[raizx].rank > auxiliar[raizy].rank)
-        auxiliar[raizy].pai = raizx;
+        auxiliar[raizy].pai = raizx; //TESTE
     else
     {
         auxiliar[raizy].pai = raizx;
